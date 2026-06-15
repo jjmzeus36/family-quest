@@ -1,88 +1,614 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow">
-<title>The Captain's Voyage — for Captain Leah</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a1628">
+<title>The Captain's Voyage</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='0.9em'%20font-size='90'%3E⚓%3C/text%3E%3C/svg%3E">
 <style>
-  :root{
-    --navy:#0a1f3c; --navy2:#102c52; --gold:#e8c96a; --gold-deep:#d4af37; --cream:#f5efe0;
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { height:100%; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: linear-gradient(180deg, #0a1628 0%, #0d2240 45%, #13315c 100%);
+    color:#f5ecd7; min-height:100vh; overflow-x:hidden;
+    touch-action: manipulation;
   }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{
-    font-family:Georgia,'Times New Roman',serif;
-    background:radial-gradient(120% 100% at 50% 0%, #16386b 0%, var(--navy2) 45%, var(--navy) 100%);
-    color:var(--cream); min-height:100vh; display:flex; align-items:center; justify-content:center;
-    padding:28px 20px; overflow-x:hidden;
+  .screen { display:none; min-height:100vh; flex-direction:column; align-items:center; padding:24px 18px 48px; position:relative; }
+  .screen.active { display:flex; animation: fadeIn .5s ease; }
+  @keyframes fadeIn { from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:none;} }
+
+  .eyebrow { letter-spacing:.35em; font-size:11px; text-transform:uppercase; color:#d4af37; margin-bottom:10px; }
+  h1 { font-size:30px; font-weight:normal; font-style:italic; text-align:center; line-height:1.2; }
+  h2 { font-size:22px; font-style:italic; font-weight:normal; text-align:center; margin-bottom:6px;}
+  .sub { color:#a8b8d0; font-size:14px; text-align:center; margin-top:8px; max-width:300px; line-height:1.5;}
+
+  .btn {
+    margin-top:22px; background:linear-gradient(180deg,#e3c25c,#c79a2a); color:#1a2238;
+    border:none; padding:15px 34px; border-radius:40px; font-family:inherit;
+    font-size:17px; font-weight:bold; letter-spacing:.04em; cursor:pointer;
+    box-shadow:0 6px 18px rgba(212,175,55,.35); transition:transform .12s;
   }
-  .stars{position:fixed;inset:0;pointer-events:none;z-index:0}
-  .stars i{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;opacity:.5;animation:tw 3.5s ease-in-out infinite}
-  @keyframes tw{0%,100%{opacity:.2}50%{opacity:.9}}
-  .card{position:relative;z-index:2;width:100%;max-width:440px;text-align:center;
-    border:1px solid rgba(232,201,106,.35);border-radius:18px;padding:40px 28px 34px;
-    background:linear-gradient(180deg, rgba(16,44,82,.65), rgba(10,31,60,.65));
-    box-shadow:0 18px 50px rgba(0,0,0,.45), inset 0 0 0 1px rgba(232,201,106,.08)}
-  .compass{width:64px;height:64px;margin:0 auto 18px;display:block;animation:sway 6s ease-in-out infinite;transform-origin:50% 50%}
-  @keyframes sway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
-  .eyebrow{letter-spacing:.32em;font-size:11px;text-transform:uppercase;color:var(--gold);
-    font-family:'Trebuchet MS',Helvetica,sans-serif;margin-bottom:14px}
-  h1{font-size:30px;line-height:1.15;color:#fff;margin-bottom:6px;font-weight:normal}
-  h1 .name{color:var(--gold);display:block;font-size:34px;margin-top:4px;text-shadow:0 1px 0 rgba(0,0,0,.3)}
-  .rule{width:70px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:22px auto}
-  p{font-size:17px;line-height:1.7;color:#e9e2d2;margin:0 auto 16px;max-width:34ch}
-  .accent{color:var(--gold);font-style:italic}
-  .closer{margin-top:26px;font-size:15px;letter-spacing:.12em;text-transform:uppercase;
-    font-family:'Trebuchet MS',Helvetica,sans-serif;color:var(--gold)}
-  .closer .soon{display:block;font-size:22px;color:#fff;letter-spacing:.04em;margin-top:6px;text-transform:none;font-family:Georgia,serif}
-  .sign{margin-top:24px;font-size:18px;color:#fff}
-  .waves{position:fixed;left:0;right:0;bottom:0;height:90px;z-index:1;opacity:.5}
-  .waves path{fill:#16386b}
-  .w2{opacity:.35;animation:drift 9s ease-in-out infinite}
-  @keyframes drift{0%,100%{transform:translateX(0)}50%{transform:translateX(-18px)}}
+  .btn:active { transform:scale(.95); }
+  .btn.ghost { background:transparent; color:#d4af37; border:1.5px solid #d4af37; box-shadow:none; font-weight:normal; }
+
+  /* ---- Boarding pass ---- */
+  .pass {
+    margin-top:26px; width:min(340px,92vw); background:#f8f3e6; color:#1a2238;
+    border-radius:16px; overflow:hidden; box-shadow:0 18px 50px rgba(0,0,0,.5);
+    animation: passIn .8s cubic-bezier(.2,1.4,.4,1);
+  }
+  @keyframes passIn { from{opacity:0; transform:translateY(40px) rotate(-3deg);} to{opacity:1;} }
+  .pass-top { background:#13315c; color:#f5ecd7; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; font-size:12px; letter-spacing:.18em; }
+  .pass-body { padding:18px; position:relative; }
+  .pass-name { font-size:24px; font-style:italic; }
+  .pass-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:14px; }
+  .pass-grid b { display:block; font-size:9px; letter-spacing:.2em; color:#8a7d5c; }
+  .pass-grid span { font-size:16px; }
+  .pass-tear { border-top:2px dashed #c9bd9e; margin:0 12px; position:relative; }
+  .pass-tear::before,.pass-tear::after { content:''; position:absolute; top:-9px; width:18px; height:18px; border-radius:50%; background:#0d2240; }
+  .pass-tear::before{ left:-21px; } .pass-tear::after{ right:-21px; }
+  .pass-foot { padding:12px 18px 16px; display:flex; justify-content:space-between; align-items:center; font-size:11px; letter-spacing:.15em; color:#8a7d5c; }
+  .stamp-anim {
+    position:absolute; right:14px; top:10px; border:3px solid #b3402e; color:#b3402e;
+    border-radius:8px; padding:4px 10px; font-size:13px; letter-spacing:.2em; font-weight:bold;
+    transform:rotate(-12deg) scale(0); animation: stampIn .4s .9s forwards cubic-bezier(.2,2,.4,1); opacity:.85;
+  }
+  @keyframes stampIn { to { transform:rotate(-12deg) scale(1);} }
+  .waves { font-size:26px; letter-spacing:6px; margin-top:30px; animation:bob 3s ease-in-out infinite; }
+  @keyframes bob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+
+  /* ---- Map ---- */
+  .route { width:min(340px,92vw); margin-top:18px; position:relative; }
+  .route::before { content:''; position:absolute; left:31px; top:30px; bottom:30px; width:2px;
+    background:repeating-linear-gradient(180deg,#d4af37 0 8px, transparent 8px 16px); opacity:.5; }
+  .port {
+    display:flex; align-items:center; gap:16px; background:rgba(255,255,255,.05);
+    border:1px solid rgba(212,175,55,.3); border-radius:16px; padding:14px; margin-bottom:16px;
+    cursor:pointer; position:relative; transition:transform .12s; backdrop-filter:blur(4px);
+  }
+  .port:active { transform:scale(.97); }
+  .port.locked { opacity:.45; pointer-events:none; }
+  .port.done { border-color:#d4af37; background:rgba(212,175,55,.12); }
+  .port-icon { width:62px; height:62px; min-width:62px; border-radius:50%; background:#13315c;
+    border:2px solid #d4af37; display:flex; align-items:center; justify-content:center; font-size:28px; z-index:1; }
+  .port-info b { font-size:17px; display:block; font-style:italic; }
+  .port-info span { font-size:12.5px; color:#a8b8d0; }
+  .port-check { margin-left:auto; font-size:24px; color:#d4af37; }
+  .stamps-row { display:flex; gap:10px; margin-top:6px; }
+  .stamp-slot { width:44px; height:44px; border:2px dashed rgba(212,175,55,.4); border-radius:10px;
+    display:flex; align-items:center; justify-content:center; font-size:20px; transform:rotate(-6deg); }
+  .stamp-slot.got { border-style:solid; border-color:#b3402e; color:#b3402e; background:rgba(179,64,46,.08); animation:stampIn2 .4s cubic-bezier(.2,2,.4,1); }
+  .digit-log { margin-top:14px; background:rgba(255,255,255,.06); border:1px solid rgba(212,175,55,.35); border-radius:14px;
+    padding:10px 18px; display:flex; gap:18px; align-items:center; }
+  .digit-log .dl-head { font-size:10px; letter-spacing:.22em; color:#d4af37; line-height:1.5; }
+  .digit-log .dl-item { display:flex; flex-direction:column; align-items:center; }
+  .digit-log .dl-item span { font-size:15px; }
+  .digit-log .dl-item b { font-size:22px; color:#ffe9a8; margin-top:2px; }
+  @keyframes stampIn2 { from{transform:rotate(-6deg) scale(2); opacity:0;} to{transform:rotate(-6deg) scale(1); opacity:1;} }
+
+  /* ---- Cards game ---- */
+  .table-felt { width:min(340px,92vw); background:radial-gradient(ellipse at center,#14533a,#0c3b28);
+    border:3px solid #6b4f1d; border-radius:20px; padding:18px 14px; margin-top:16px; box-shadow:inset 0 0 40px rgba(0,0,0,.4); }
+  .hand-label { font-size:11px; letter-spacing:.25em; text-transform:uppercase; color:#cfe3d8; margin:6px 0; display:flex; justify-content:space-between; }
+  .hand { display:flex; gap:6px; min-height:84px; flex-wrap:wrap; }
+  .pcard {
+    width:56px; height:80px; background:#fdfbf4; border-radius:8px; color:#1a2238;
+    display:flex; flex-direction:column; justify-content:space-between; padding:6px; font-size:17px; font-weight:bold;
+    box-shadow:0 4px 10px rgba(0,0,0,.35); animation:dealIn .3s ease; font-family:Georgia,serif;
+  }
+  @keyframes dealIn { from{transform:translateY(-20px) rotate(6deg); opacity:0;} to{opacity:1;} }
+  .pcard.red { color:#b3402e; }
+  .pcard.back { background:repeating-linear-gradient(45deg,#13315c 0 6px,#1d4377 6px 12px); }
+  .pcard .br { align-self:flex-end; transform:rotate(180deg); }
+  .duel-msg { text-align:center; min-height:24px; margin-top:12px; font-style:italic; font-size:15px; color:#ffe9a8;}
+  .duel-btns { display:flex; gap:12px; justify-content:center; margin-top:10px; }
+
+  /* ---- Unscramble ---- */
+  .hint-card { background:rgba(255,255,255,.06); border:1px solid rgba(212,175,55,.3); border-radius:14px;
+    padding:14px 18px; margin-top:18px; text-align:center; font-style:italic; font-size:15.5px; width:min(330px,90vw); color:#dfe7f2;}
+  .slots,.tiles { display:flex; gap:8px; justify-content:center; margin-top:18px; flex-wrap:wrap; width:min(340px,92vw);}
+  .slot { width:42px; height:50px; border-bottom:3px solid #d4af37; display:flex; align-items:center; justify-content:center;
+    font-size:24px; font-weight:bold; color:#ffe9a8; }
+  .tile { width:46px; height:52px; background:linear-gradient(180deg,#e3c25c,#c79a2a); color:#1a2238; border-radius:9px;
+    display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:bold; cursor:pointer;
+    box-shadow:0 4px 0 #8a6a1c; transition:transform .1s; user-select:none; }
+  .tile:active { transform:translateY(3px); box-shadow:0 1px 0 #8a6a1c; }
+  .tile.used { visibility:hidden; }
+  .shake { animation:shake .4s; }
+  @keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-8px);} 75%{transform:translateX(8px);} }
+  .word-dots { display:flex; gap:8px; margin-top:18px; }
+  .wdot { width:10px; height:10px; border-radius:50%; border:1.5px solid #d4af37; }
+  .wdot.on { background:#d4af37; }
+
+  /* ---- Memory ---- */
+  .mem-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; width:min(320px,90vw); margin-top:18px; }
+  .mcard { aspect-ratio:3/4; border-radius:12px; position:relative; cursor:pointer; perspective:600px; }
+  .mface { position:absolute; inset:0; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    font-size:34px; backface-visibility:hidden; transition:transform .4s; }
+  .mback { background:repeating-linear-gradient(45deg,#13315c 0 8px,#1d4377 8px 16px); border:2px solid #d4af37; }
+  .mfront { background:#f8f3e6; transform:rotateY(180deg); border:2px solid #d4af37; }
+  .mcard.flip .mback { transform:rotateY(180deg); }
+  .mcard.flip .mfront { transform:rotateY(0); }
+  .mcard.matched .mfront { background:#ffe9a8; box-shadow:0 0 16px rgba(212,175,55,.7); }
+
+  /* ---- Harbor ---- */
+  .code-display { display:flex; gap:12px; margin-top:20px; }
+  .code-box { width:56px; height:68px; border:2px solid #d4af37; border-radius:12px; background:rgba(255,255,255,.05);
+    display:flex; align-items:center; justify-content:center; font-size:32px; color:#ffe9a8; }
+  .keypad { display:grid; grid-template-columns:repeat(3,72px); gap:10px; margin-top:20px; }
+  .key { height:58px; border-radius:14px; background:rgba(255,255,255,.08); border:1px solid rgba(212,175,55,.4);
+    color:#f5ecd7; font-size:22px; font-family:inherit; cursor:pointer; }
+  .key:active { background:rgba(212,175,55,.25); }
+
+  /* ---- Modal / digit reveal ---- */
+  .modal { position:fixed; inset:0; background:rgba(5,10,22,.85); display:none; align-items:center; justify-content:center; z-index:50; padding:20px;}
+  .modal.show { display:flex; }
+  .modal-card { background:#f8f3e6; color:#1a2238; border-radius:20px; padding:30px 24px; text-align:center;
+    width:min(320px,88vw); animation:passIn .5s cubic-bezier(.2,1.6,.4,1); }
+  .modal-card .big { font-size:50px; margin:8px 0; }
+  .modal-card h3 { font-style:italic; font-size:21px; }
+  .modal-card p { font-size:14px; color:#5a5340; margin-top:8px; line-height:1.5;}
+  .digit-chip { display:inline-block; margin-top:12px; background:#13315c; color:#ffe9a8; font-size:26px;
+    padding:8px 22px; border-radius:12px; letter-spacing:.1em; }
+
+  /* ---- Certificate ---- */
+  .cert { width:min(345px,93vw); background:#f8f3e6; color:#1a2238; border-radius:6px; padding:10px; margin-top:20px;
+    box-shadow:0 20px 60px rgba(0,0,0,.6); }
+  .cert-inner { border:3px double #b08d2a; padding:22px 16px; text-align:center; }
+  .cert-inner .crest { font-size:40px; }
+  .cert-title { font-size:13px; letter-spacing:.3em; color:#8a6a1c; margin-top:8px; }
+  .cert-name { font-size:30px; font-style:italic; margin:10px 0 4px; }
+  .cert-text { font-size:13.5px; color:#5a5340; line-height:1.6; }
+  .token { margin-top:16px; background:linear-gradient(135deg,#13315c,#1d4377); color:#f5ecd7; border-radius:16px;
+    padding:18px; box-shadow:0 8px 24px rgba(0,0,0,.3); }
+  .token .sym { font-size:46px; animation:bob 2.5s ease-in-out infinite; display:inline-block;}
+  .token .word { font-size:24px; letter-spacing:.35em; color:#ffe9a8; margin-top:6px; font-weight:bold;}
+  .token p { font-size:12px; color:#a8b8d0; margin-top:8px; }
+
+  .confetti { position:fixed; top:-20px; border-radius:3px; pointer-events:none; z-index:99; animation:fall linear forwards; }
+  @keyframes fall { to { transform:translateY(110vh) rotate(720deg); opacity:.6; } }
+  .back-link { position:absolute; top:18px; left:18px; color:#d4af37; font-size:14px; cursor:pointer; letter-spacing:.05em; padding:6px 10px; border:1px solid rgba(212,175,55,.35); border-radius:20px; background:rgba(10,22,40,.5); z-index:5;}
 </style>
 </head>
 <body>
-  <div class="stars" id="stars"></div>
 
-  <svg class="waves" viewBox="0 0 500 90" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M0,40 C120,75 200,10 320,40 C420,65 470,30 500,45 L500,90 L0,90 Z"/>
-    <path class="w2" d="M0,55 C110,30 220,80 330,52 C430,28 470,60 500,50 L500,90 L0,90 Z"/>
-  </svg>
-
-  <main class="card">
-    <svg class="compass" viewBox="0 0 64 64" aria-hidden="true">
-      <circle cx="32" cy="32" r="29" fill="none" stroke="#e8c96a" stroke-width="2"/>
-      <circle cx="32" cy="32" r="23" fill="none" stroke="#e8c96a" stroke-width="1" opacity=".5"/>
-      <polygon points="32,10 37,32 32,30 27,32" fill="#e8c96a"/>
-      <polygon points="32,54 27,32 32,34 37,32" fill="#b9962f"/>
-      <circle cx="32" cy="32" r="3" fill="#fff"/>
-    </svg>
-
-    <div class="eyebrow">The Captain's Voyage</div>
-    <h1>Welcome aboard,<span class="name">Captain Leah</span></h1>
-    <div class="rule"></div>
-
-    <p>Remember the California shore — the two of us combing the sand for shells? I walked a beach the other day and did the very same thing. <span class="accent">One went straight in my pocket, just thinking of you.</span></p>
-
-    <p>Rough waters always find their calm again — the way the people who matter always find their way back to each other.</p>
-
-    <div class="closer">
-      Cleared for arrival
-      <span class="soon">Very soon. ⚓</span>
+<!-- BOARDING -->
+<div class="screen active" id="boarding">
+  <div class="eyebrow">Now Boarding</div>
+  <h1>The Captain's<br>Voyage</h1>
+  <div class="pass">
+    <div class="pass-top"><span>⚓ FAMILY LINES</span><span>VOYAGE Nº 1</span></div>
+    <div class="pass-body">
+      <div class="stamp-anim">CLEARED</div>
+      <b style="font-size:10px; letter-spacing:.2em; color:#8a7d5c;">PASSENGER</b>
+      <div class="pass-name">Captain Leah</div>
+      <div class="pass-grid">
+        <div><b>SHIP</b><span>The Together</span></div>
+        <div><b>GATE</b><span>♥</span></div>
+        <div><b>SEAT</b><span>HELM</span></div>
+      </div>
     </div>
+    <div class="pass-tear"></div>
+    <div class="pass-foot"><span>DEST: HOME HARBOR</span><span>|||||||||||||</span></div>
+  </div>
+  <div class="waves">🌊 ⛵ 🌊</div>
+  <button class="btn" onclick="sndChime();go('map')">Begin the Voyage</button>
+  <p class="sub">Three ports stand between you and Home Harbor, Captain. Each one hides a secret digit.</p>
+</div>
 
-    <div class="sign">— with love</div>
-  </main>
+<!-- MAP -->
+<div class="screen" id="map">
+  <div class="eyebrow">Chart Your Course</div>
+  <h2>Ports of Call</h2>
+  <div class="stamps-row" id="stampsRow">
+    <div class="stamp-slot" id="st0">·</div>
+    <div class="stamp-slot" id="st1">·</div>
+    <div class="stamp-slot" id="st2">·</div>
+  </div>
+  <div class="digit-log" id="logMap"></div>
+  <div class="route" id="route" style="margin-top:14px;">
+    <div class="port" id="p0" onclick="openPort(0)">
+      <div class="port-icon">🃏</div>
+      <div class="port-info"><b>Port of Chance</b><span>Beat the First Mate at Twenty-One</span></div>
+      <div class="port-check" id="pc0"></div>
+    </div>
+    <div class="port locked" id="p1" onclick="openPort(1)">
+      <div class="port-icon">🔤</div>
+      <div class="port-info"><b>Scrambled Shores</b><span>Untangle three sea-words</span></div>
+      <div class="port-check" id="pc1"></div>
+    </div>
+    <div class="port locked" id="p2" onclick="openPort(2)">
+      <div class="port-icon">🧭</div>
+      <div class="port-info"><b>Twin Tide Isles</b><span>Match the pairs hidden in the fog</span></div>
+      <div class="port-check" id="pc2"></div>
+    </div>
+    <div class="port locked" id="p3" onclick="go('harbor')">
+      <div class="port-icon">🏠</div>
+      <div class="port-info"><b>Home Harbor</b><span>Enter the 3-digit code to dock</span></div>
+      <div class="port-check" id="pc3"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PORT 1 : CARDS -->
+<div class="screen" id="cards">
+  <div class="back-link" onclick="go('map')">← Map</div>
+  <div class="eyebrow">Port of Chance</div>
+  <h2>Twenty-One</h2>
+  <p class="sub" style="margin-top:2px;">Closest to 21 without going over. Win one hand to earn your stamp.</p>
+  <div class="table-felt">
+    <div class="hand-label"><span>The First Mate 🦜</span><span id="mateScore"></span></div>
+    <div class="hand" id="mateHand"></div>
+    <div class="hand-label" style="margin-top:14px;"><span>Captain Leah</span><span id="leahScore"></span></div>
+    <div class="hand" id="leahHand"></div>
+    <div class="duel-msg" id="duelMsg">The First Mate shuffles the deck…</div>
+    <div class="duel-btns">
+      <button class="btn" id="hitBtn" style="margin-top:0; padding:11px 26px;" onclick="hit()">Hit</button>
+      <button class="btn ghost" id="standBtn" style="margin-top:0; padding:11px 26px;" onclick="stand()">Stand</button>
+      <button class="btn" id="redealBtn" style="margin-top:0; padding:11px 26px; display:none;" onclick="deal()">Deal Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- PORT 2 : UNSCRAMBLE -->
+<div class="screen" id="words">
+  <div class="back-link" onclick="go('map')">← Map</div>
+  <div class="eyebrow">Scrambled Shores</div>
+  <h2>Sea-Words</h2>
+  <div class="word-dots" id="wordDots"></div>
+  <div class="hint-card" id="hintCard"></div>
+  <div class="slots" id="slots"></div>
+  <div class="tiles" id="tiles"></div>
+  <button class="btn ghost" style="padding:10px 22px; font-size:14px;" onclick="resetWord()">Clear letters</button>
+</div>
+
+<!-- PORT 3 : MEMORY -->
+<div class="screen" id="memory">
+  <div class="back-link" onclick="go('map')">← Map</div>
+  <div class="eyebrow">Twin Tide Isles</div>
+  <h2>Match the Pairs</h2>
+  <p class="sub" style="margin-top:2px;">Six pairs hide in the fog. <span id="memMoves">Moves: 0</span></p>
+  <div class="mem-grid" id="memGrid"></div>
+</div>
+
+<!-- HARBOR -->
+<div class="screen" id="harbor">
+  <div class="back-link" onclick="go('map')">← Map</div>
+  <div class="eyebrow">Home Harbor</div>
+  <h2>The Dock Gate</h2>
+  <p class="sub" style="margin-top:2px;">Enter the three secret digits, in the order of the ports you conquered.</p>
+  <div class="digit-log" id="logHarbor"></div>
+  <div class="code-display">
+    <div class="code-box" id="cb0">·</div>
+    <div class="code-box" id="cb1">·</div>
+    <div class="code-box" id="cb2">·</div>
+  </div>
+  <div class="keypad" id="keypad"></div>
+</div>
+
+<!-- FINALE -->
+<div class="screen" id="finale">
+  <div class="eyebrow">Voyage Complete</div>
+  <div class="cert">
+    <div class="cert-inner">
+      <div class="crest">⚓</div>
+      <div class="cert-title">CERTIFICATE OF VOYAGE</div>
+      <div class="cert-name">Captain Leah</div>
+      <div class="cert-text">has out-played the First Mate, untangled the Scrambled Shores,<br>
+      pierced the fog of the Twin Tide Isles,<br>and docked safely at Home Harbor.</div>
+    </div>
+  </div>
+  <div class="token">
+    <div style="font-size:11px; letter-spacing:.3em; color:#a8b8d0;">YOUR FAMILY KEY PIECE</div>
+    <div class="sym">⚓</div>
+    <div class="word">ALWAYS</div>
+    <p>Keep this symbol and word safe, Captain.<br>The crew will need all three pieces at the <b>Family Finale</b>.</p>
+  </div>
+  <button class="btn ghost" onclick="go('map')">Back to the map</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <h3 id="mTitle"></h3>
+    <div class="big" id="mIcon"></div>
+    <p id="mText"></p>
+    <div class="digit-chip" id="mDigit"></div>
+    <br><button class="btn" style="margin-top:18px;" onclick="closeModal()">Set Sail →</button>
+  </div>
+</div>
 
 <script>
-  // gentle starfield
-  var s=document.getElementById('stars');
-  for(var i=0;i<46;i++){var d=document.createElement('i');
-    d.style.left=Math.random()*100+'%';d.style.top=Math.random()*70+'%';
-    d.style.animationDelay=(Math.random()*3.5)+'s';
-    d.style.transform='scale('+(0.6+Math.random()*1.4)+')';s.appendChild(d);}
+/* ============ shared ============ */
+var AC=null;
+function tone(f,d,type,v,t){ try{
+  AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+  var o=AC.createOscillator(),g=AC.createGain();
+  o.type=type||'sine'; o.frequency.value=f; o.connect(g); g.connect(AC.destination);
+  var now=AC.currentTime+(t||0); g.gain.setValueAtTime(v||.12,now);
+  g.gain.exponentialRampToValueAtTime(.001,now+(d||.15));
+  o.start(now); o.stop(now+(d||.15)+.02);
+}catch(e){} }
+function sndChime(){ tone(523,.18); tone(659,.18,'sine',.12,.12); tone(784,.3,'sine',.12,.24); }
+function sndWin(){ [523,659,784,1047].forEach(function(f,i){ tone(f,.25,'triangle',.14,i*.13); }); }
+function sndNo(){ tone(196,.25,'sawtooth',.07); }
+function sndTap(){ tone(880,.06,'sine',.08); }
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='cards') deal();
+  if(id==='words') initWords();
+  if(id==='memory') initMem();
+}
+function confetti(n){
+  var colors=['#d4af37','#f5ecd7','#b3402e','#1d4377','#ffe9a8'];
+  for(var i=0;i<(n||40);i++){
+    var c=document.createElement('div'); c.className='confetti';
+    c.style.left=Math.random()*100+'vw';
+    c.style.width=c.style.height=(6+Math.random()*8)+'px';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDuration=(1.8+Math.random()*1.6)+'s';
+    c.style.animationDelay=(Math.random()*.4)+'s';
+    document.body.appendChild(c);
+    setTimeout(function(el){return function(){el.remove();}}(c),3800);
+  }
+}
+
+/* ============ state ============ */
+var DIGITS=[5,1,4];
+var state={ports:[false,false,false]};
+try{ var saved=localStorage.getItem('leahQuest'); if(saved) state=JSON.parse(saved);}catch(e){}
+function save(){ try{ localStorage.setItem('leahQuest',JSON.stringify(state)); }catch(e){} }
+
+function paintLog(){
+  ['logMap','logHarbor'].forEach(function(id){
+    var el=document.getElementById(id); if(!el) return;
+    var html='<div class="dl-head">CAPTAIN\'S<br>LOG</div>';
+    ['🃏','🔤','🧭'].forEach(function(ic,i){
+      html+='<div class="dl-item"><span>'+ic+'</span><b>'+(state.ports[i]?DIGITS[i]:'?')+'</b></div>';
+    });
+    el.innerHTML=html;
+  });
+}
+function refreshMap(){
+  paintLog();
+  for(var i=0;i<3;i++){
+    var p=document.getElementById('p'+i);
+    var prevDone = i===0 ? true : state.ports[i-1];
+    p.classList.toggle('locked', !prevDone && !state.ports[i]);
+    p.classList.toggle('done', !!state.ports[i]);
+    document.getElementById('pc'+i).textContent = state.ports[i] ? '✓' : (p.classList.contains('locked')?'🔒':'');
+    var st=document.getElementById('st'+i);
+    if(state.ports[i]){ st.classList.add('got'); st.textContent=['🃏','🔤','🧭'][i]; }
+  }
+  var all=state.ports[0]&&state.ports[1]&&state.ports[2];
+  var p3=document.getElementById('p3');
+  p3.classList.toggle('locked',!all);
+  document.getElementById('pc3').textContent = all?'→':'🔒';
+}
+function openPort(i){
+  if(document.getElementById('p'+i).classList.contains('locked')) return;
+  sndTap();
+  go(['cards','words','memory'][i]);
+}
+function portDone(i,icon,name){
+  if(state.ports[i]){ sndWin(); confetti(30); setTimeout(function(){go('map');},700); return; }
+  state.ports[i]=true; save(); refreshMap();
+  sndWin(); confetti(50);
+  document.getElementById('mTitle').textContent='Stamp Earned!';
+  document.getElementById('mIcon').textContent=icon;
+  document.getElementById('mText').innerHTML='You conquered <b>'+name+'</b>.<br>Secret digit recovered — it\'s saved in your <b>Captain\'s Log</b>:';
+  document.getElementById('mDigit').textContent='✦ '+DIGITS[i]+' ✦';
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal(){ document.getElementById('modal').classList.remove('show'); go('map'); }
+
+/* ============ Port 1 : 21 ============ */
+var deck=[],leah=[],mate=[],duelOver=false;
+function newDeck(){
+  var suits=['♠','♥','♦','♣'],ranks=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+  deck=[];
+  suits.forEach(function(s){ranks.forEach(function(r){deck.push({r:r,s:s});});});
+  for(var i=deck.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=deck[i];deck[i]=deck[j];deck[j]=t;}
+}
+function handVal(h){
+  var v=0,aces=0;
+  h.forEach(function(c){
+    if(c.r==='A'){v+=11;aces++;}
+    else if(['J','Q','K'].indexOf(c.r)>=0) v+=10;
+    else v+=parseInt(c.r,10);
+  });
+  while(v>21&&aces>0){v-=10;aces--;}
+  return v;
+}
+function cardEl(c,faceDown){
+  var d=document.createElement('div');
+  d.className='pcard'+((c.s==='♥'||c.s==='♦')?' red':'')+(faceDown?' back':'');
+  if(!faceDown) d.innerHTML='<span>'+c.r+c.s+'</span><span class="br">'+c.r+c.s+'</span>';
+  return d;
+}
+function renderHands(hideMate){
+  var mh=document.getElementById('mateHand'),lh=document.getElementById('leahHand');
+  mh.innerHTML='';lh.innerHTML='';
+  mate.forEach(function(c,i){ mh.appendChild(cardEl(c, hideMate&&i===0)); });
+  leah.forEach(function(c){ lh.appendChild(cardEl(c)); });
+  document.getElementById('leahScore').textContent=handVal(leah);
+  document.getElementById('mateScore').textContent=hideMate?'?':handVal(mate);
+}
+function deal(){
+  newDeck(); leah=[deck.pop(),deck.pop()]; mate=[deck.pop(),deck.pop()]; duelOver=false;
+  document.getElementById('hitBtn').style.display='';
+  document.getElementById('standBtn').style.display='';
+  document.getElementById('redealBtn').style.display='none';
+  document.getElementById('duelMsg').textContent='Your move, Captain. Hit or stand?';
+  renderHands(true); sndTap();
+}
+function hit(){
+  if(duelOver)return;
+  leah.push(deck.pop()); renderHands(true); sndTap();
+  if(handVal(leah)>21){ endDuel('bust'); }
+}
+function stand(){
+  if(duelOver)return;
+  while(handVal(mate)<17){ mate.push(deck.pop()); }
+  renderHands(false);
+  var lv=handVal(leah),mv=handVal(mate);
+  if(mv>21||lv>mv) endDuel('win');
+  else if(lv===mv) endDuel('push');
+  else endDuel('lose');
+}
+function endDuel(res){
+  duelOver=true; renderHands(res!=='bust'?false:true);
+  var msg=document.getElementById('duelMsg');
+  document.getElementById('hitBtn').style.display='none';
+  document.getElementById('standBtn').style.display='none';
+  if(res==='win'){ msg.textContent='The First Mate tips his hat. Victory!'; setTimeout(function(){portDone(0,'🃏','the Port of Chance');},900); }
+  else{
+    document.getElementById('redealBtn').style.display='';
+    msg.textContent= res==='bust' ? 'Over 21! The Mate cackles. Deal again?'
+      : res==='push' ? 'A tie! The sea demands a rematch.' : 'The Mate wins this hand. Again!';
+    sndNo();
+  }
+}
+
+/* ============ Port 2 : unscramble ============ */
+var WORDS=[
+  {w:'ANCHOR', h:'"It keeps a ship — and a family — steady."'},
+  {w:'VOYAGE', h:'"Every great one starts with a single wave."'},
+  {w:'COMPASS', h:'"It always points the way back to each other."'}
+];
+var wIdx=0, answer=[];
+function initWords(){ wIdx=0; renderDots(); loadWord(); }
+function renderDots(){
+  var d=document.getElementById('wordDots'); d.innerHTML='';
+  WORDS.forEach(function(_,i){ var s=document.createElement('div'); s.className='wdot'+(i<wIdx?' on':''); d.appendChild(s); });
+}
+function scramble(w){
+  var a=w.split(''),s;
+  do{ for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;} s=a.join(''); }while(s===w);
+  return a;
+}
+function loadWord(){
+  answer=[];
+  var w=WORDS[wIdx].w;
+  document.getElementById('hintCard').textContent=WORDS[wIdx].h;
+  var slots=document.getElementById('slots'); slots.innerHTML='';
+  for(var i=0;i<w.length;i++){ var s=document.createElement('div'); s.className='slot'; s.id='sl'+i; slots.appendChild(s); }
+  var tiles=document.getElementById('tiles'); tiles.innerHTML='';
+  scramble(w).forEach(function(ch,i){
+    var t=document.createElement('div'); t.className='tile'; t.textContent=ch; t.id='tl'+i;
+    t.onclick=function(){ tapTile(t,ch); };
+    tiles.appendChild(t);
+  });
+}
+function tapTile(t,ch){
+  if(t.classList.contains('used'))return;
+  var w=WORDS[wIdx].w;
+  if(answer.length>=w.length)return;
+  t.classList.add('used'); sndTap();
+  answer.push({ch:ch,tile:t});
+  paintSlots();
+  if(answer.length===w.length){
+    var guess=answer.map(function(a){return a.ch;}).join('');
+    if(guess===w){
+      sndChime();
+      wIdx++; renderDots();
+      if(wIdx>=WORDS.length){ setTimeout(function(){portDone(1,'🔤','the Scrambled Shores');},500); }
+      else setTimeout(loadWord,600);
+    } else {
+      document.getElementById('slots').classList.add('shake'); sndNo();
+      setTimeout(function(){ document.getElementById('slots').classList.remove('shake'); resetWord(); },450);
+    }
+  }
+}
+function resetWord(){
+  answer.forEach(function(a){ a.tile.classList.remove('used'); });
+  answer=[]; paintSlots();
+}
+function paintSlots(){
+  var w=WORDS[wIdx]?WORDS[wIdx].w:'';
+  for(var i=0;i<w.length;i++){
+    var s=document.getElementById('sl'+i); if(s) s.textContent=answer[i]?answer[i].ch:'';
+  }
+}
+
+/* ============ Port 3 : memory ============ */
+var memOpen=[],memLock=false,memFound=0,memMoves=0;
+function initMem(){
+  memOpen=[];memFound=0;memMoves=0;memLock=false;
+  document.getElementById('memMoves').textContent='Moves: 0';
+  var icons=['⚓','🧭','⛵','🌊','🐚','🗺️'];
+  var cards=icons.concat(icons);
+  for(var i=cards.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=cards[i];cards[i]=cards[j];cards[j]=t;}
+  var g=document.getElementById('memGrid'); g.innerHTML='';
+  cards.forEach(function(ic){
+    var c=document.createElement('div'); c.className='mcard';
+    c.innerHTML='<div class="mface mback">🌫️</div><div class="mface mfront">'+ic+'</div>';
+    c.dataset.icon=ic;
+    c.onclick=function(){ flipCard(c); };
+    g.appendChild(c);
+  });
+}
+function flipCard(c){
+  if(memLock||c.classList.contains('flip')||c.classList.contains('matched'))return;
+  c.classList.add('flip'); sndTap(); memOpen.push(c);
+  if(memOpen.length===2){
+    memLock=true; memMoves++;
+    document.getElementById('memMoves').textContent='Moves: '+memMoves;
+    var a=memOpen[0],b=memOpen[1];
+    if(a.dataset.icon===b.dataset.icon){
+      setTimeout(function(){
+        a.classList.add('matched'); b.classList.add('matched');
+        memOpen=[];memLock=false; memFound++; sndChime();
+        if(memFound===6) setTimeout(function(){portDone(2,'🧭','the Twin Tide Isles');},500);
+      },420);
+    } else {
+      setTimeout(function(){ a.classList.remove('flip'); b.classList.remove('flip'); memOpen=[];memLock=false; },800);
+    }
+  }
+}
+
+/* ============ Harbor ============ */
+var code=[];
+(function buildPad(){
+  var pad=document.getElementById('keypad');
+  [1,2,3,4,5,6,7,8,9,'⌫',0,'✓'].forEach(function(k){
+    var b=document.createElement('button'); b.className='key'; b.textContent=k;
+    b.onclick=function(){ padTap(k); };
+    pad.appendChild(b);
+  });
+})();
+function padTap(k){
+  sndTap();
+  if(k==='⌫'){ code.pop(); }
+  else if(k==='✓'){ checkCode(); return; }
+  else if(code.length<3){ code.push(k); }
+  for(var i=0;i<3;i++) document.getElementById('cb'+i).textContent = code[i]!==undefined?code[i]:'·';
+}
+function checkCode(){
+  if(code.length<3)return;
+  if(code.join('')===DIGITS.join('')){
+    sndWin(); confetti(80); go('finale');
+  } else {
+    sndNo();
+    var d=document.querySelector('.code-display'); d.classList.add('shake');
+    setTimeout(function(){ d.classList.remove('shake'); code=[]; padTap('⌫'); },450);
+  }
+}
+
+/* hidden staging reset: 7 quick taps on the stamp row */
+(function(){var n=0,t0=0,el=document.getElementById('stampsRow');
+el.addEventListener('pointerdown',function(){var now=Date.now();
+if(now-t0>3000){n=0;t0=now;} n++;
+if(n>=7){try{localStorage.removeItem('leahQuest');}catch(e){} location.reload();}});})();
+
+refreshMap();
 </script>
 </body>
 </html>
