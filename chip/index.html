@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Hi Chip! A note from Biscuit</title>
+<style>
+  :root{ --sky:#7ec8f0; --sky2:#bfe6ff; --hill:#7ed07a; --hill2:#5bb85f; --sun:#ffd23f; --ink:#3a4a2f; --cloud:#ffffff; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Comic Sans MS','Trebuchet MS',Verdana,sans-serif;
+    background:linear-gradient(180deg,var(--sky) 0%,var(--sky2) 60%);
+    min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 18px;overflow-x:hidden;color:var(--ink)}
+  .scene{position:relative;z-index:2;width:100%;max-width:430px;background:#fff;border-radius:24px;
+    box-shadow:0 16px 40px rgba(40,80,120,.28);overflow:hidden}
+  .sky{position:relative;height:200px;background:linear-gradient(180deg,#8fd0f4,#cfecff);overflow:hidden}
+  .sun{position:absolute;top:22px;right:26px;width:58px;height:58px;border-radius:50%;background:var(--sun);
+    box-shadow:0 0 0 10px rgba(255,210,63,.3),0 0 34px rgba(255,210,63,.6);animation:pulse 3s ease-in-out infinite}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+  .cloud{position:absolute;background:var(--cloud);border-radius:50px;opacity:.95}
+  .cloud::before,.cloud::after{content:"";position:absolute;background:var(--cloud);border-radius:50%}
+  .c1{width:80px;height:24px;top:40px;left:-90px;animation:float1 16s linear infinite}
+  .c1::before{width:34px;height:34px;top:-15px;left:12px}.c1::after{width:26px;height:26px;top:-11px;left:42px}
+  .c2{width:60px;height:18px;top:96px;left:-70px;animation:float2 22s linear infinite;opacity:.8}
+  .c2::before{width:26px;height:26px;top:-12px;left:10px}.c2::after{width:20px;height:20px;top:-8px;left:32px}
+  @keyframes float1{from{transform:translateX(0)}to{transform:translateX(560px)}}
+  @keyframes float2{from{transform:translateX(0)}to{transform:translateX(540px)}}
+  .hill{position:absolute;bottom:0;left:0;right:0;height:96px;background:var(--hill);border-radius:50% 50% 0 0/100% 100% 0 0}
+  .dog{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);animation:peek 3.4s ease-in-out infinite}
+  @keyframes peek{0%,100%{transform:translateX(-50%) translateY(6px)}50%{transform:translateX(-50%) translateY(-4px)}}
+  .body{padding:24px 24px 28px;text-align:center}
+  h1{font-size:30px;color:#e9682f;margin-bottom:4px}
+  .paws{font-size:18px;letter-spacing:6px;margin:6px 0 14px;color:#b9762f}
+  p{font-size:19px;line-height:1.7;margin:0 auto 14px;max-width:28ch}
+  .big{font-size:22px;color:#2f8f4f;font-weight:bold}
+  .ask{background:#fff7e0;border:2px dashed #ffce4a;border-radius:14px;padding:14px 16px;margin:18px auto 6px;font-size:18px;max-width:30ch}
+  .sign{margin-top:18px;font-size:18px;color:#5a7a4a}
+</style>
+</head>
+<body>
+  <main class="scene">
+    <div class="sky">
+      <div class="sun"></div>
+      <div class="cloud c1"></div>
+      <div class="cloud c2"></div>
+      <div class="hill"></div>
+      <!-- Biscuit peeking over the hill -->
+      <svg class="dog" width="116" height="92" viewBox="0 0 116 92" aria-hidden="true">
+        <ellipse cx="20" cy="50" rx="15" ry="26" fill="#caa06a" transform="rotate(-18 20 50)"/>
+        <ellipse cx="96" cy="50" rx="15" ry="26" fill="#caa06a" transform="rotate(18 96 50)"/>
+        <circle cx="58" cy="54" r="34" fill="#e3bd80"/>
+        <circle cx="58" cy="54" r="34" fill="none" stroke="#caa06a" stroke-width="2" opacity=".5"/>
+        <ellipse cx="58" cy="66" rx="17" ry="13" fill="#f3e0c0"/>
+        <circle cx="46" cy="48" r="5.5" fill="#3a2a1a"/><circle cx="70" cy="48" r="5.5" fill="#3a2a1a"/>
+        <circle cx="47.6" cy="46.4" r="1.8" fill="#fff"/><circle cx="71.6" cy="46.4" r="1.8" fill="#fff"/>
+        <ellipse cx="58" cy="60" rx="6" ry="4.5" fill="#3a2a1a"/>
+        <path d="M58 64 Q52 72 46 67" stroke="#7a5a38" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M58 64 Q64 72 70 67" stroke="#7a5a38" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M30 30 Q24 8 44 24" fill="#b8884f"/>
+      </svg>
+    </div>
+
+    <div class="body">
+      <h1>Hi Chip!</h1>
+      <div class="paws">🐾 🐾 🐾</div>
+      <p><span class="big">Biscuit can't wait to see you!</span></p>
+      <p>He wags his tail every time he hears your name. Have the <b>best</b> summer ever, okay?</p>
+      <div class="ask">🎨 Will you paint or color something amazing for me? Send a picture of your masterpiece!</div>
+      <div class="sign">— love you bunches 💛</div>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>The Captain's Voyage — for Captain Leah</title>
+<style>
+  :root{
+    --navy:#0a1f3c; --navy2:#102c52; --gold:#e8c96a; --gold-deep:#d4af37; --cream:#f5efe0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:Georgia,'Times New Roman',serif;
+    background:radial-gradient(120% 100% at 50% 0%, #16386b 0%, var(--navy2) 45%, var(--navy) 100%);
+    color:var(--cream); min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding:28px 20px; overflow-x:hidden;
+  }
+  .stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+  .stars i{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;opacity:.5;animation:tw 3.5s ease-in-out infinite}
+  @keyframes tw{0%,100%{opacity:.2}50%{opacity:.9}}
+  .card{position:relative;z-index:2;width:100%;max-width:440px;text-align:center;
+    border:1px solid rgba(232,201,106,.35);border-radius:18px;padding:40px 28px 34px;
+    background:linear-gradient(180deg, rgba(16,44,82,.65), rgba(10,31,60,.65));
+    box-shadow:0 18px 50px rgba(0,0,0,.45), inset 0 0 0 1px rgba(232,201,106,.08)}
+  .compass{width:64px;height:64px;margin:0 auto 18px;display:block;animation:sway 6s ease-in-out infinite;transform-origin:50% 50%}
+  @keyframes sway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+  .eyebrow{letter-spacing:.32em;font-size:11px;text-transform:uppercase;color:var(--gold);
+    font-family:'Trebuchet MS',Helvetica,sans-serif;margin-bottom:14px}
+  h1{font-size:30px;line-height:1.15;color:#fff;margin-bottom:6px;font-weight:normal}
+  h1 .name{color:var(--gold);display:block;font-size:34px;margin-top:4px;text-shadow:0 1px 0 rgba(0,0,0,.3)}
+  .rule{width:70px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:22px auto}
+  p{font-size:17px;line-height:1.7;color:#e9e2d2;margin:0 auto 16px;max-width:34ch}
+  .accent{color:var(--gold);font-style:italic}
+  .closer{margin-top:26px;font-size:15px;letter-spacing:.12em;text-transform:uppercase;
+    font-family:'Trebuchet MS',Helvetica,sans-serif;color:var(--gold)}
+  .closer .soon{display:block;font-size:22px;color:#fff;letter-spacing:.04em;margin-top:6px;text-transform:none;font-family:Georgia,serif}
+  .sign{margin-top:24px;font-size:18px;color:#fff}
+  .waves{position:fixed;left:0;right:0;bottom:0;height:90px;z-index:1;opacity:.5}
+  .waves path{fill:#16386b}
+  .w2{opacity:.35;animation:drift 9s ease-in-out infinite}
+  @keyframes drift{0%,100%{transform:translateX(0)}50%{transform:translateX(-18px)}}
+</style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+
+  <svg class="waves" viewBox="0 0 500 90" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,40 C120,75 200,10 320,40 C420,65 470,30 500,45 L500,90 L0,90 Z"/>
+    <path class="w2" d="M0,55 C110,30 220,80 330,52 C430,28 470,60 500,50 L500,90 L0,90 Z"/>
+  </svg>
+
+  <main class="card">
+    <svg class="compass" viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="32" r="29" fill="none" stroke="#e8c96a" stroke-width="2"/>
+      <circle cx="32" cy="32" r="23" fill="none" stroke="#e8c96a" stroke-width="1" opacity=".5"/>
+      <polygon points="32,10 37,32 32,30 27,32" fill="#e8c96a"/>
+      <polygon points="32,54 27,32 32,34 37,32" fill="#b9962f"/>
+      <circle cx="32" cy="32" r="3" fill="#fff"/>
+    </svg>
+
+    <div class="eyebrow">The Captain's Voyage</div>
+    <h1>Welcome aboard,<span class="name">Captain Leah</span></h1>
+    <div class="rule"></div>
+
+    <p>Remember the California shore — the two of us combing the sand for shells? I walked a beach the other day and did the very same thing. <span class="accent">One went straight in my pocket, just thinking of you.</span></p>
+
+    <p>Rough waters always find their calm again — the way the people who matter always find their way back to each other.</p>
+
+    <div class="closer">
+      Cleared for arrival
+      <span class="soon">Very soon. ⚓</span>
+    </div>
+
+    <div class="sign">— with love</div>
+  </main>
+
+<script>
+  // gentle starfield
+  var s=document.getElementById('stars');
+  for(var i=0;i<46;i++){var d=document.createElement('i');
+    d.style.left=Math.random()*100+'%';d.style.top=Math.random()*70+'%';
+    d.style.animationDelay=(Math.random()*3.5)+'s';
+    d.style.transform='scale('+(0.6+Math.random()*1.4)+')';s.appendChild(d);}
+</script>
+</body>
+</html>

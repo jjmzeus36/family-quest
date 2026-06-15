@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>AI BOYZ — Back Together Soon</title>
+<style>
+  :root{ --bg:#070b16; --bg2:#0e1630; --cyan:#3df0e0; --green:#54f07a; --ink:#cfe9ff; --pink:#ff5dd2; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Courier New',ui-monospace,monospace;
+    background:radial-gradient(120% 90% at 50% 0%, #16224a 0%, var(--bg2) 50%, var(--bg) 100%);
+    color:var(--ink);min-height:100vh;display:flex;align-items:center;justify-content:center;
+    padding:28px 18px;overflow-x:hidden;
+  }
+  .grid{position:fixed;inset:0;z-index:0;opacity:.18;
+    background-image:linear-gradient(var(--cyan) 1px,transparent 1px),linear-gradient(90deg,var(--cyan) 1px,transparent 1px);
+    background-size:34px 34px;mask-image:radial-gradient(circle at 50% 30%,#000,transparent 75%)}
+  .card{position:relative;z-index:2;width:100%;max-width:440px;text-align:center;
+    border:2px solid rgba(61,240,224,.5);border-radius:14px;padding:26px 22px 30px;
+    background:rgba(7,11,22,.72);box-shadow:0 0 40px rgba(61,240,224,.18), inset 0 0 24px rgba(61,240,224,.06)}
+  .xmit{font-size:12px;letter-spacing:.22em;color:var(--green);text-transform:uppercase;margin-bottom:18px}
+  .xmit .dot{animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .bots{display:flex;align-items:flex-end;justify-content:center;gap:18px;margin:6px 0 14px}
+  .bot{animation:bob 2.4s ease-in-out infinite}
+  .bot.small{animation-delay:.5s}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  h1{font-size:26px;line-height:1.2;color:#fff;letter-spacing:.04em;margin:8px 0 4px}
+  h1 .glow{color:var(--cyan);text-shadow:0 0 12px rgba(61,240,224,.6)}
+  p{font-size:15px;line-height:1.7;color:#bcdcf5;max-width:34ch;margin:14px auto}
+  .bar{height:16px;border:1px solid rgba(61,240,224,.6);border-radius:8px;max-width:300px;margin:20px auto 8px;overflow:hidden;background:rgba(0,0,0,.4)}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--cyan));animation:load 3.2s ease-out forwards;border-radius:8px}
+  @keyframes load{to{width:86%}}
+  .status{font-size:12px;letter-spacing:.18em;color:var(--green);text-transform:uppercase}
+  .ps{margin-top:22px;font-size:13px;color:var(--pink);letter-spacing:.04em}
+  .sign{margin-top:10px;font-size:14px;color:#9fc6ea}
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <main class="card">
+    <div class="xmit">▸ Incoming transmission<span class="dot">_</span></div>
+
+    <div class="bots">
+      <!-- big bot -->
+      <svg class="bot big" width="92" height="116" viewBox="0 0 92 116" aria-hidden="true">
+        <line x1="46" y1="6" x2="46" y2="18" stroke="#3df0e0" stroke-width="3"/><circle cx="46" cy="5" r="5" fill="#54f07a"/>
+        <rect x="16" y="18" width="60" height="46" rx="8" fill="#16224a" stroke="#3df0e0" stroke-width="3"/>
+        <rect x="28" y="32" width="14" height="14" rx="3" fill="#3df0e0"/><rect x="50" y="32" width="14" height="14" rx="3" fill="#3df0e0"/>
+        <rect x="34" y="52" width="24" height="5" rx="2.5" fill="#54f07a"/>
+        <rect x="22" y="66" width="48" height="34" rx="6" fill="#102c52" stroke="#3df0e0" stroke-width="3"/>
+        <rect x="33" y="76" width="26" height="6" rx="3" fill="#3df0e0" opacity=".7"/>
+        <rect x="6" y="70" width="10" height="26" rx="4" fill="#16224a" stroke="#3df0e0" stroke-width="2.5"/>
+        <rect x="76" y="70" width="10" height="26" rx="4" fill="#16224a" stroke="#3df0e0" stroke-width="2.5"/>
+        <rect x="30" y="100" width="12" height="14" rx="3" fill="#16224a" stroke="#3df0e0" stroke-width="2.5"/>
+        <rect x="50" y="100" width="12" height="14" rx="3" fill="#16224a" stroke="#3df0e0" stroke-width="2.5"/>
+      </svg>
+      <!-- small bot -->
+      <svg class="bot small" width="62" height="86" viewBox="0 0 62 86" aria-hidden="true">
+        <line x1="31" y1="4" x2="31" y2="14" stroke="#ff5dd2" stroke-width="2.5"/><circle cx="31" cy="3" r="4" fill="#ff5dd2"/>
+        <rect x="10" y="14" width="42" height="34" rx="7" fill="#16224a" stroke="#ff5dd2" stroke-width="3"/>
+        <rect x="19" y="25" width="10" height="10" rx="2.5" fill="#ff5dd2"/><rect x="33" y="25" width="10" height="10" rx="2.5" fill="#ff5dd2"/>
+        <rect x="16" y="50" width="30" height="24" rx="5" fill="#102c52" stroke="#ff5dd2" stroke-width="3"/>
+        <rect x="22" y="74" width="8" height="10" rx="2.5" fill="#16224a" stroke="#ff5dd2" stroke-width="2"/>
+        <rect x="32" y="74" width="8" height="10" rx="2.5" fill="#16224a" stroke="#ff5dd2" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <h1><span class="glow">AI BOYZ</span><br>BACK TOGETHER SOON</h1>
+
+    <p>Mission status: the big build is loading. This little card is just the warm-up cartridge — the real build, the giant one, happens when we're side by side again.</p>
+
+    <div class="bar"><i></i></div>
+    <div class="status">▸ Reuniting… status: SOON</div>
+
+    <div class="ps">P.S. — AI Boyz reassemble. 🤖</div>
+    <div class="sign">— see you soon, buddy</div>
+  </main>
+</body>
+</html>
