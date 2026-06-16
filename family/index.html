@@ -74,7 +74,14 @@
   .video-box .vb-ico{font-size:42px;}
   .video-box b{display:block;margin-top:8px;font-size:16px;font-style:italic;}
   .video-box p{font-size:12px;color:#caa8a0;margin-top:6px;line-height:1.6;}
-  .video-box video,.video-box iframe{width:100%;border-radius:12px;margin-top:6px;border:none;aspect-ratio:16/9;background:#000;}
+  .video-box img{width:100%;border-radius:10px;margin-top:6px;display:block;}
+  .selfie-btn{display:inline-block;margin-top:14px;background:linear-gradient(180deg,#ffd98a,#e8a84c);color:#3a2430;
+    padding:13px 28px;border-radius:40px;font-size:16px;font-weight:bold;cursor:pointer;box-shadow:0 6px 18px rgba(232,168,76,.4);}
+  .selfie-btn:active{transform:scale(.95);}
+  .selfie-frame{background:#fff;padding:10px 10px 16px;border-radius:6px;margin-top:16px;box-shadow:0 14px 34px rgba(0,0,0,.5);transform:rotate(-1.5deg);}
+  .selfie-frame img{width:100%;border-radius:3px;display:block;}
+  .selfie-cap{color:#4a2454;font-size:13px;font-style:italic;margin-top:8px;}
+  #selfieHint{font-size:12px;color:#ffce7a;margin-top:12px;}
 
   .btn{margin-top:24px;background:linear-gradient(180deg,#ffd98a,#e8a84c);color:#3a2430;border:none;
     padding:15px 34px;border-radius:40px;font-family:inherit;font-size:17px;font-weight:bold;cursor:pointer;
@@ -139,10 +146,18 @@
     </div>
   </div>
 
-  <div class="video-box" id="videoBox">
-    <div class="vb-ico">🎬</div>
-    <b>A message for the crew</b>
-    <p id="videoNote">— from the Quest Master —</p>
+  <div class="video-box" id="selfieBox">
+    <div class="vb-ico">📸</div>
+    <b>Great job finishing — together!</b>
+    <p>You cracked the seal as a crew. Now squeeze in close…<br>it's time for a family selfie!</p>
+    <label class="selfie-btn">📸 Take the Selfie
+      <input type="file" id="selfieInput" accept="image/*" hidden>
+    </label>
+    <div class="selfie-frame" id="selfieFrame" style="display:none;">
+      <img id="selfieImg" alt="Our family selfie">
+      <div class="selfie-cap">The Family Quest Champions 🏆</div>
+    </div>
+    <p id="selfieHint" style="display:none;">📲 Screenshot it to keep it forever!</p>
   </div>
 
   <button class="btn" onclick="dance()">🎉 Family Dance Party</button>
@@ -151,13 +166,10 @@
 
 <script>
 /* =========================================================
-   QUEST MASTER SETTINGS (Jesse — edit these two lines)
-   VIDEO_URL: paste a direct .mp4 link OR a YouTube embed
-   link (https://www.youtube.com/embed/XXXX). Leave "" for
-   the placeholder card.
+   THE FINALE ends with a family selfie — when the crew taps
+   "Take the Selfie," their photo drops into a polaroid frame
+   right on the page. Nothing here needs configuring.
 ========================================================= */
-var VIDEO_URL = "";
-var FROM_NAME = "the Quest Master";
 
 var ANSWER=['⚓','💎','🐾'];
 var DECOYS=['⚓','💎','🐾','⭐','🌊','🚲','🎲','🏰','🪁'];
@@ -262,38 +274,8 @@ function goCert(){
   var d=new Date();
   var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
   document.getElementById('certDate').textContent='SEALED THIS DAY · '+months[d.getMonth()].toUpperCase()+' '+d.getDate()+', '+d.getFullYear();
-  // video
-  var box=document.getElementById('videoBox');
-  if(VIDEO_URL){
-    var note=document.getElementById('videoNote');
-    note.textContent='— from '+FROM_NAME+' —';
-    var el;
-    if(VIDEO_URL.indexOf('youtube')>=0||VIDEO_URL.indexOf('youtu.be')>=0){
-      el=document.createElement('iframe');el.src=VIDEO_URL;el.allow='autoplay; fullscreen';
-    } else {
-      el=document.createElement('video');el.src=VIDEO_URL;el.controls=true;el.playsInline=true;
-    }
-    box.appendChild(el);
-  } else {
-    document.getElementById('videoNote').innerHTML='A special video from '+FROM_NAME+' plays here.<br><i>(Quest Master: open this file and paste your video link at the top of the script.)</i>';
-  }
-}
-var dancing=false,danceTimer=null,beat=0;
-function dance(){
-  var d=document.getElementById('dancers');
-  dancing=!dancing;
-  d.style.display=dancing?'flex':'none';
-  if(dancing){
-    confetti(80);
-    danceTimer=setInterval(function(){
-      beat++;
-      if(beat%4===1)tone(110,.13,'sine',.15);
-      tone(5000,.03,'square',.02);
-      if(beat%8===5)tone(1400,.08,'triangle',.07);
-      if(beat%16===0)confetti(12);
-    },250);
-  } else if(danceTimer){clearInterval(danceTimer);}
-}
-</script>
-</body>
-</html>
+  // selfie — when the crew picks/takes a photo, it drops into a polaroid frame
+  var inp=document.getElementById('selfieInput');
+  if(inp && !inp.__wired){
+    inp.__wired=true;
+    inp.addEventListener('change',fun
