@@ -157,6 +157,7 @@
       <img id="selfieImg" alt="Our family selfie">
       <div class="selfie-cap">The Family Quest Champions 🏆</div>
     </div>
+    <button class="selfie-btn" id="shareBtn" style="display:none;border:none;font-family:inherit;cursor:pointer;">📤 Send it to the family</button>
     <p id="selfieHint" style="display:none;">📲 Screenshot it to keep it forever!</p>
   </div>
 
@@ -278,4 +279,53 @@ function goCert(){
   var inp=document.getElementById('selfieInput');
   if(inp && !inp.__wired){
     inp.__wired=true;
-    inp.addEventListener('change',fun
+    inp.addEventListener('change',function(e){
+      var file=e.target.files && e.target.files[0];
+      if(!file) return;
+      document.getElementById('selfieImg').src=URL.createObjectURL(file);
+      document.getElementById('selfieFrame').style.display='block';
+      document.getElementById('selfieHint').style.display='block';
+      window.__selfieFile=file;
+      var sb=document.getElementById('shareBtn');
+      if(sb) sb.style.display='inline-block';
+      tone(740,.12,'triangle',.1);
+    });
+  }
+  // share — one tap opens the phone's native share sheet with the photo attached
+  var shareBtn=document.getElementById('shareBtn');
+  if(shareBtn && !shareBtn.__wired){
+    shareBtn.__wired=true;
+    shareBtn.addEventListener('click',async function(){
+      var file=window.__selfieFile;
+      var hint=document.getElementById('selfieHint');
+      try{
+        if(file && navigator.canShare && navigator.canShare({files:[file]})){
+          await navigator.share({files:[file],title:'Family Quest Champions',text:'We finished the Family Quest — always better together! ⚓💎🐾'});
+        } else if(navigator.share){
+          await navigator.share({title:'Family Quest Champions',text:'We finished the Family Quest — always better together! ⚓💎🐾 (our photo is in the screenshot!)'});
+        } else if(hint){
+          hint.textContent='📲 Press and hold the photo to save it, then text it to the family!';
+        }
+      }catch(err){}
+    });
+  }
+}
+var dancing=false,danceTimer=null,beat=0;
+function dance(){
+  var d=document.getElementById('dancers');
+  dancing=!dancing;
+  d.style.display=dancing?'flex':'none';
+  if(dancing){
+    confetti(80);
+    danceTimer=setInterval(function(){
+      beat++;
+      if(beat%4===1)tone(110,.13,'sine',.15);
+      tone(5000,.03,'square',.02);
+      if(beat%8===5)tone(1400,.08,'triangle',.07);
+      if(beat%16===0)confetti(12);
+    },250);
+  } else if(danceTimer){clearInterval(danceTimer);}
+}
+</script>
+</body>
+</html>
